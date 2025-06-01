@@ -3,6 +3,8 @@
 Welcome to *VastraVerse*, an interactive web application dedicated to exploring the rich tapestry of Indian culture, traditions, and fashion. Discover detailed information about traditional outfits, regional styles, festivals, and ceremonies, enhanced with cutting-edge AI features like a knowledgeable chatbot and a virtual clothing try-on experience.
 
 ---
+<video src="assets/vid.mp4" controls width="600"></video>
+---
 
 ## 🌟 Features
 
