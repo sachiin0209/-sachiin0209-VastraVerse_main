@@ -4,6 +4,7 @@ Welcome to *VastraVerse*, an interactive web application dedicated to exploring 
 
 ---
 <video src="assets/vid.mp4" controls width="600"></video>
+
 ---
 
 ## 🌟 Features
