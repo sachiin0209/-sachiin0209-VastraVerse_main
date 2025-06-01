@@ -1,0 +1,36 @@
+# Ignore all ComfyUI modules and models
+comfyui/models/
+comfyui/custom_nodes/
+comfyui/venv/
+comfyui/output/
+comfyui/input/
+comfyui/temp/
+
+# Ignore logs, cache, and large temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+
+# Python venv (if created at root)
+venv/
+env/
+__pycache__/
+*.pyc
+
+# VS Code and other IDE configs
+.vscode/
+.idea/
+
+# Ignore uploads/downloads or large folders (adjust if different)
+downloads/
+uploads/
+*.ckpt
+*.safetensors
+
+# System files
+*.orig
+*.db
+*.sqlite

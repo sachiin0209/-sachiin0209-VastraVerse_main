@@ -714,205 +714,320 @@ document.addEventListener('DOMContentLoaded', () => {
   // Dark mode toggle for the image upload functionality
   document.addEventListener('DOMContentLoaded', function() {
     // Dark mode toggle
-    const darkModeToggle = document.getElementById('darkModeToggle');
+    const themeToggle = document.getElementById('themeToggle');
     const html = document.documentElement;
-    
+
     // Check for saved theme preference or use system preference
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    const savedTheme = localStorage.getItem('vastraverse_dark_mode');
+    if (savedTheme === 'true' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       html.classList.add('dark');
+      if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    } else {
+      html.classList.remove('dark');
+      if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
     }
-    
+
     // Toggle dark mode
-    if (darkModeToggle) {
-      darkModeToggle.addEventListener('click', function() {
+    if (themeToggle) {
+      themeToggle.addEventListener('click', function() {
         html.classList.toggle('dark');
         const isDark = html.classList.contains('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        localStorage.setItem('vastraverse_dark_mode', isDark);
+        if (themeToggle) {
+          themeToggle.innerHTML = isDark ?
+            '<i class="fas fa-sun"></i>' :
+            '<i class="fas fa-moon"></i>';
+        }
       });
     }
-    
+
     // Mobile menu toggle
-    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
-    
-    if (mobileMenuButton && mobileMenu) {
-      mobileMenuButton.addEventListener('click', function() {
+
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', function() {
         mobileMenu.classList.toggle('hidden');
       });
-      
+
       // Close mobile menu when clicking outside
       document.addEventListener('click', function(event) {
-        if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target) && !mobileMenu.classList.contains('hidden')) {
+        if (!mobileMenuBtn.contains(event.target) && !mobileMenu.contains(event.target) && !mobileMenu.classList.contains('hidden')) {
           mobileMenu.classList.add('hidden');
         }
       });
     }
-    
+
     // Image upload and preview
-    const photoInput = document.getElementById('photoInput');
-    const dropArea = document.getElementById('dropArea');
+    const imageUpload = document.getElementById('imageUpload');
+    const uploadPlaceholder = document.getElementById('uploadPlaceholder');
     const imagePreview = document.getElementById('imagePreview');
-    const previewContainer = document.getElementById('previewContainer');
-    const uploadPrompt = document.getElementById('uploadPrompt');
-    const photoUploadForm = document.getElementById('photoUploadForm');
-    const browseButton = document.getElementById('browseButton');
-    const submitButton = document.getElementById('submitButton');
-    
-    if (photoInput && dropArea) {
-      // Initialize submit button state
-      if (submitButton) {
-        submitButton.disabled = true;
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const generateButton = document.getElementById('generateButton');
+    const originalImageDisplay = document.getElementById('originalImageDisplay'); // Corrected ID
+    const generatedImageSection = document.getElementById('generatedImageSection'); // Corrected ID
+    const generatedResults = document.getElementById('generatedResults'); // Added ID for the new results section
+    const downloadButton = document.getElementById('downloadButton');
+    const shareButton = document.getElementById('shareButton');
+    const tryAgainButton = document.getElementById('tryAgainButton'); // Added ID for try again button
+
+    if (imageUpload && uploadPlaceholder) {
+      // Initialize generate button state
+      if (generateButton) {
+        generateButton.disabled = true;
       }
-      
-      // Click event for browse button
-      if (browseButton) {
-        browseButton.addEventListener('click', function() {
-          photoInput.click();
-        });
-      }
-      
+
       // File input change event
-      photoInput.addEventListener('change', function() {
+      imageUpload.addEventListener('change', function() {
         handleFileSelect(this.files[0]);
       });
-      
+
       // Drag and drop events
       ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropArea.addEventListener(eventName, preventDefaults, false);
+        uploadPlaceholder.addEventListener(eventName, preventDefaults, false);
       });
-      
+
       function preventDefaults(e) {
         e.preventDefault();
         e.stopPropagation();
       }
-      
+
       ['dragenter', 'dragover'].forEach(eventName => {
-        dropArea.addEventListener(eventName, highlight, false);
+        uploadPlaceholder.addEventListener(eventName, highlight, false);
       });
-      
+
       ['dragleave', 'drop'].forEach(eventName => {
-        dropArea.addEventListener(eventName, unhighlight, false);
+        uploadPlaceholder.addEventListener(eventName, unhighlight, false);
       });
-      
+
       function highlight() {
-        dropArea.classList.add('dragover');
+        uploadPlaceholder.classList.add('dragover');
       }
-      
+
       function unhighlight() {
-        dropArea.classList.remove('dragover');
+        uploadPlaceholder.classList.remove('dragover');
       }
-      
-      dropArea.addEventListener('drop', function(e) {
+
+      uploadPlaceholder.addEventListener('drop', function(e) {
         const dt = e.dataTransfer;
         const files = dt.files;
         handleFileSelect(files[0]);
       });
-      
+
       // Handle file selection
       function handleFileSelect(file) {
         if (!file) return;
-        
+
         if (!file.type.match('image.*')) {
           showNotification('Please select an image file (JPEG, PNG, etc.)', 'error');
           return;
         }
-        
+
+        // Assign the selected file to the file input's files property
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        imageUpload.files = dataTransfer.files;
+
         const reader = new FileReader();
-        
+
         reader.onload = function(e) {
           imagePreview.src = e.target.result;
-          uploadPrompt.classList.add('hidden');
-          previewContainer.classList.remove('hidden');
-          
-          // Enable submit button
-          if (submitButton) {
-            submitButton.disabled = false;
+          if (originalImageDisplay) { // Update original image display
+            originalImageDisplay.src = e.target.result;
+          }
+          uploadPlaceholder.classList.add('hidden');
+          imagePreviewContainer.classList.remove('hidden');
+          imagePreviewContainer.classList.add('flex'); // Ensure flex display for centering
+
+          // Enable generate button
+          if (generateButton) {
+            generateButton.disabled = false;
           }
         };
-        
+
         reader.readAsDataURL(file);
       }
-      
-      // Handle outfit selection
-      const outfitRadios = document.querySelectorAll('input[name="outfitType"]');
-      
-      outfitRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-          // Remove selected class from all labels
-          document.querySelectorAll('input[name="outfitType"] + label').forEach(label => {
-            label.parentNode.classList.remove('ring-2', 'ring-teal-500');
-          });
-          
-          // Add selected class to checked radio's label
-          if (this.checked) {
-            this.nextElementSibling.parentNode.classList.add('ring-2', 'ring-teal-500');
+
+      // Handle remove image button
+      const removeImage = document.getElementById('removeImage');
+      if (removeImage) {
+        removeImage.addEventListener('click', function() {
+          imagePreview.src = '#';
+          if (originalImageDisplay) {
+            originalImageDisplay.src = '#';
           }
-        });
-      });
-      
-      // Handle form submission
-      if (photoUploadForm) {
-        photoUploadForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          
-          const selectedOutfit = document.querySelector('input[name="outfitType"]:checked');
-          
-          if (!imagePreview.src || !selectedOutfit) {
-            showNotification('Please select an image and an outfit type', 'error');
-            return;
+          imageUpload.value = '';
+          imagePreviewContainer.classList.add('hidden');
+          imagePreviewContainer.classList.remove('flex');
+          uploadPlaceholder.classList.remove('hidden');
+          if (generateButton) {
+            generateButton.disabled = true;
           }
-          
-          // Check if user is logged in
-          const currentUser = JSON.parse(localStorage.getItem('vastraverse_current_user'));
-          if (!currentUser) {
-            showNotification('Please log in to try on outfits', 'error');
-            
-            // Redirect to login page after a short delay
-            setTimeout(() => {
-              window.location.href = 'login.html';
-            }, 1500);
-            return;
+          if (generatedResults) { // Hide results section on removing image
+            generatedResults.classList.add('hidden');
           }
-          
-          // Show loading state
-          submitButton.disabled = true;
-          submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
-          
-          // Simulate processing (in real app, this would be an API call)
-          setTimeout(() => {
-            // Display success message or redirect to results page
-            showNotification('Your photo has been processed! In a real app, this would show your image with the selected outfit.', 'success');
-            
-            // Reset form
-            resetForm();
-          }, 2000);
         });
       }
-      
-      function resetForm() {
-        if (photoUploadForm) {
-          photoUploadForm.reset();
-          uploadPrompt.classList.remove('hidden');
-          previewContainer.classList.add('hidden');
-          submitButton.disabled = true;
-          submitButton.innerHTML = 'Try On Outfit';
-          
-          // Reset outfit selection
-          document.querySelectorAll('input[name="outfitType"] + label').forEach(label => {
-            label.parentNode.classList.remove('ring-2', 'ring-teal-500');
-          });
+
+      // Handle outfit style selection to update prompt (if these elements exist)
+      const outfitStyle = document.getElementById('outfitStyle');
+      const regionSelect = document.getElementById('regionSelect');
+      const transformPrompt = document.getElementById('transformPrompt');
+
+      if (outfitStyle && regionSelect && transformPrompt) {
+        outfitStyle.addEventListener('change', updateTransformPrompt);
+        regionSelect.addEventListener('change', updateTransformPrompt);
+
+        // Initial prompt update on load
+        updateTransformPrompt();
+      }
+
+      function updateTransformPrompt() {
+        const style = outfitStyle ? outfitStyle.value : '';
+        const region = regionSelect ? regionSelect.value : '';
+
+        let defaultPrompt = "";
+
+        if (style === 'saree') {
+          defaultPrompt = `A full-body photograph of the same person in the input image, in the exact same pose and expression, now wearing a traditional silk saree`;
+
+          if (region === 'south') {
+            defaultPrompt += ` in South Indian Kanjeevaram style with gold zari border draped elegantly,`;
+          } else if (region === 'east') {
+            defaultPrompt += ` in Bengali Tant style with red border draped over shoulder,`;
+          } else if (region === 'west') {
+            defaultPrompt += ` in Gujarati style with decorative Bandhani pattern,`;
+          } else {
+            defaultPrompt += ` with a gold-embroidered border draped over shoulder,`;
+          }
+        } else if (style === 'lehenga') {
+          defaultPrompt = `A full-body photograph of the same person in the input image, in the exact same pose and expression, now wearing a traditional embroidered lehenga choli`;
+        } else if (style === 'kurta') {
+          defaultPrompt = `A full-body photograph of the same person in the input image, in the exact same pose and expression, now wearing a traditional kurta pajama`;
+        } else if (style === 'sherwani') {
+          defaultPrompt = `A full-body photograph of the same person in the input image, in the exact same pose and expression, now wearing a traditional embroidered sherwani`;
+        } else if (style === 'salwar') {
+          defaultPrompt = `A full-body photograph of the same person in the input image, in the exact same pose and expression, now wearing a traditional salwar kameez`;
+        } else if (style === 'dhoti') {
+          defaultPrompt = `A full-body photograph of the same person in the input image, in the exact same pose and expression, now wearing a traditional white dhoti kurta`;
+        } else if (style === 'custom') {
+           defaultPrompt = `A full-body photograph of the same person in the input image, in the exact same pose and expression, now wearing a traditional Indian outfit`;
+        }
+
+        // Add quality descriptors to all prompts
+        defaultPrompt += ` preserving their face, hairstyle, and posture, photorealistic, DSLR quality, rich colors, studio lighting`;
+
+        // Update the prompt textarea
+        if (transformPrompt) {
+          transformPrompt.value = defaultPrompt;
         }
       }
+
+
+      // Generate button functionality
+      if (generateButton) {
+        generateButton.addEventListener('click', function () {
+          if (!imageUpload.files[0]) {
+            showNotification('Please upload an image first', 'error');
+            return;
+          }
+
+          if (!transformPrompt || !transformPrompt.value.trim()) {
+            showNotification('Please provide a transformation prompt', 'error');
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append('image', imageUpload.files[0]);
+          formData.append('prompt', transformPrompt.value);
+
+          if (generatedResults) {
+             generatedResults.classList.remove('hidden');
+          }
+          const generatedImageDiv = document.querySelector('.generated-image');
+          const loadingOverlay = document.querySelector('.loading-overlay');
+
+          if (generatedImageDiv) generatedImageDiv.style.display = 'block';
+          if (loadingOverlay) loadingOverlay.style.display = 'flex';
+
+
+          console.log("Attempting to send image generation request..."); // Added console log
+
+          // Make API request to server.py
+          fetch('http://localhost:5000/generate', {
+            method: 'POST',
+            body: formData
+          })
+            .then(response => {
+              if (!response.ok) throw new Error("Image generation failed");
+              return response.blob();
+            })
+            .then(blob => {
+              const imageUrl = URL.createObjectURL(blob);
+              if (generatedImage) {
+                generatedImage.src = imageUrl;
+              }
+              if (loadingOverlay) loadingOverlay.style.display = 'none';
+
+              // Enable download
+              if (downloadButton) {
+                downloadButton.onclick = () => {
+                  const a = document.createElement('a');
+                  a.href = imageUrl;
+                  a.download = 'generated_outfit.png';
+                  a.click();
+                };
+              }
+            })
+            .catch(err => {
+              console.error(err);
+              showNotification("Failed to generate image.", 'error');
+              if (loadingOverlay) loadingOverlay.style.display = 'none';
+            });
+        });
+      }
+
+      // Download button functionality (handled within generateButton click)
+
+      // Share button functionality
+      if (shareButton) {
+        shareButton.addEventListener('click', function() {
+          // In a real implementation, this would open sharing options
+          showNotification('In a complete implementation, this would open sharing options for your image', 'info');
+        });
+      }
+
+      // Try Again button functionality
+      if (tryAgainButton) {
+        tryAgainButton.addEventListener('click', function() {
+          // Reset the form and hide results
+          if (imageUpload) imageUpload.value = '';
+          if (imagePreview) imagePreview.src = '#';
+          if (originalImageDisplay) originalImageDisplay.src = '#';
+          if (imagePreviewContainer) {
+            imagePreviewContainer.classList.add('hidden');
+            imagePreviewContainer.classList.remove('flex');
+          }
+          if (uploadPlaceholder) uploadPlaceholder.classList.remove('hidden');
+          if (generateButton) generateButton.disabled = true;
+          if (generatedResults) generatedResults.classList.add('hidden');
+          const generatedImageDiv = document.querySelector('.generated-image');
+          if (generatedImageDiv) generatedImageDiv.style.display = 'none';
+          if (transformPrompt) transformPrompt.value = ''; // Clear prompt
+          if (outfitStyle) outfitStyle.value = 'custom'; // Reset outfit style dropdown
+          if (regionSelect) regionSelect.value = ''; // Reset region dropdown
+          updateTransformPrompt(); // Update prompt based on reset dropdowns
+        });
+      }
     }
-    
-    // Animation on scroll
+
+    // Animation on scroll (if needed, ensure elements have .fade-in or .slide-up classes)
     const observerOptions = {
       root: null,
       rootMargin: '0px',
       threshold: 0.1
     };
-    
+
     const observer = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -921,7 +1036,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }, observerOptions);
-    
+
     document.querySelectorAll('.fade-in, .slide-up').forEach(el => {
       observer.observe(el);
     });
