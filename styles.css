@@ -265,3 +265,46 @@ input[type="radio"]:checked + label {
   transform: rotate(15deg) scale(1.1);
   color: #ec4899;
 }
+
+.nav-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.nav-search-input {
+  padding: 0.5rem 0.75rem;
+  min-width: 240px;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  outline: none;
+  color: black;
+  
+}
+
+.nav-search-input::placeholder {
+  color: black;
+}
+
+.nav-search-input:focus {
+  border-color: #94a3b8;
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.25);
+}
+
+.nav-serach-btn {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid white;
+  border-radius: 9999px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.nav-search-btn:hover {
+  background: white;
+}
+@media (max-width: 640px){
+  .nav-search {width: 100%}
+  .nav-search-input {flex: 1; min-width: 0;}
+
+}
