@@ -1,356 +1,618 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VastraVerse - Cultural Dressing Virtual Photoshoot & Festival Guide</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <link href="styles.css" rel="stylesheet">
-  <!-- LottieFiles CDN for animations -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
-  <style>
-    /* Shimmer base style for skeleton loaders */
-    .shimmer {
-      position: relative;
-      overflow: hidden;
-      background: #23272f;
-    }
-    .shimmer::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -150px; width: 150px; height: 100%;
-      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
-      animation: shimmer 1.5s infinite;
-    }
-    @keyframes shimmer {
-      100% { left: 100%; }
-    }
-    
-    /* Added styles for prompt help section */
-    .prompt-tip {
-      border-left: 3px solid #ec4899;
-      padding-left: 16px;
-    }
-    
-    /* Generated image container */
-    .generated-image {
-      position: relative;
-      display: none;
-      overflow: hidden;
-      border-radius: 0.5rem;
-      border: 2px solid #374151;
-    }
-    
-    .loading-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(17, 24, 39, 0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      z-index: 10;
-    }
-    
-    .spinner {
-      border: 4px solid rgba(236, 72, 153, 0.3);
-      border-radius: 50%;
-      border-top: 4px solid #ec4899;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 12px;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
-</head>
-<body class="bg-gray-900 text-white font-sans antialiased">
-  <!-- Navbar -->
-  <nav id="navbar" class="fixed w-full z-10 transition-all duration-300 ease-in-out py-4 bg-gray-900 bg-opacity-90 backdrop-filter backdrop-blur-lg">
-    <div class="container mx-auto px-4 flex justify-between items-center">
-      <div class="flex items-center space-x-2">
-        <div class="text-pink-500 text-2xl"><i class="fas fa-tshirt"></i></div>
-        <a href="index.html" class="text-xl font-bold">Vastra<span class="text-pink-500">Verse</span></a>
-      </div>
-      
-      <div class="hidden md:flex items-center space-x-8">
-        <a href="index.html" class="hover:text-pink-500 transition-colors">Home</a>
-        <a href="about.html" class="hover:text-pink-500 transition-colors">About</a>
-        <a href="chatbot.html" class="hover:text-pink-500 transition-colors">Chatbot</a>
-        <button id="themeToggle" class="hover:text-pink-500 transition-colors">
-          <i class="fas fa-sun"></i>
-        </button>
-      </div>
-      
-      <div class="auth-buttons flex items-center space-x-4">
-        <a href="login.html" class="px-4 py-2 rounded-full border border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors">Login</a>
-        <a href="signup.html" class="px-4 py-2 rounded-full bg-pink-500 text-white hover:bg-pink-600 transition-colors hidden md:block">Sign Up</a>
-      </div>
-      <div class="user-menu hidden items-center space-x-4">
-        <span class="text-gray-400">Hello, <span class="user-name">User</span></span>
-        <button id="logoutButton" class="px-4 py-2 rounded-full border border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors">Logout</button>
-      </div>
-      <button id="mobileMenuBtn" class="md:hidden text-gray-200 hover:text-pink-500">
-        <i class="fas fa-bars text-xl"></i>
-      </button>
-      <form class="nav-search" role="search" aria-label="Site search" onsubmit="return false;">
-        <input type="search" class="nav-search-input" placeholder="Search..." aria-label="Search" />
-        <button type="submit" class="nav-search-btn" aria-label="Submit search"> </button>
-      </form>
-    
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="md:hidden bg-gray-800 hidden">
-      <div class="container mx-auto px-4 py-4 flex flex-col space-y-3">
-        <a href="index.html" class="block py-2 hover:text-pink-500 transition-colors">Home</a>
-        <a href="about.html" class="block py-2 hover:text-pink-500 transition-colors">About</a>
-        <a href="chatbot.html" class="block py-2 hover:text-pink-500 transition-colors">Chatbot</a>
-        <button class="px-4 py-2 rounded-full bg-pink-500 text-white hover:bg-pink-600 transition-colors w-full mt-2">Sign Up</button>
-      </div>
-    </div>
-  </nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      VastraVerse - Cultural Dressing Virtual Photoshoot & Festival Guide
+    </title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="styles.css" rel="stylesheet" />
+    <!-- LottieFiles CDN for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
+    <style>
+      /* Shimmer base style for skeleton loaders */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background: #23272f;
+  border-radius: 0.5rem; /* smoother edges */
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  width: 150px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  100% {
+    left: 100%;
+  }
+}
 
-  <!-- Hero Section (moved and restyled) -->
-  <section id="hero" class="min-h-screen flex items-center justify-center pt-24 pb-16" style="min-height:100vh;">
-    <div class="container mx-auto px-4 flex flex-col items-center justify-center text-center">
-      <div class="animate-fade-in-up">
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-          <span class="text-pink-500">Welcome to VastraVerse </span>
-        </h1>
-        <p class="text-xl md:text-2xl text-gray-300 mb-8">
-          A Cultural Dressing Virtual Photoshoot & Festival Guide Powered by Generative AI
-        </p>
-        <p class="text-gray-400 mb-10">
-          Preserving heritage, reimagining tradition — through AI
-        </p>
-        <div class="flex flex-wrap gap-4 justify-center">
-          <a href="#photoshoot" class="px-8 py-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-pink-400 shadow-lg">
-            Get Started
-          </a>
-          <a href="#learn-more" class="px-8 py-3 rounded-full border border-pink-500 text-pink-500 hover:bg-pink-500 hover:bg-opacity-10 transition-colors focus:outline-none focus:ring-2 focus:ring-pink-400">
-            Learn More
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+/* Highlighted tip */
+.prompt-tip {
+  border-left: 3px solid #ec4899;
+  padding-left: 16px;
+  margin-bottom: 1rem; /* spacing from next element */
+}
 
-  <!-- AI Virtual Photoshoot Section (full width, no empty left column) -->
-  <section id="photoshoot" class="min-h-screen flex items-center justify-center w-full" style="min-height:100vh;">
-    <div class="container mx-auto px-4 flex flex-col items-center justify-center w-full h-full">
-      <div class="w-full md:w-2/3 lg:w-1/2 animate-fade-in flex items-center justify-center h-full">
-        <div class="bg-gray-800 p-6 rounded-xl shadow-2xl border border-gray-700 w-full max-w-2xl mx-auto">
-          <div class="text-center mb-6">
-            <h2 class="text-2xl font-semibold">AI Virtual Photoshoot</h2>
-            <p class="text-gray-400">Transform your photo with traditional Indian outfits</p>
-          </div>
-          
-          <!-- Original Image Upload Section -->
-          <div class="mb-6">
-            <div id="imagePreviewContainer" class="relative hidden mb-4 rounded-lg overflow-hidden bg-gray-700 h-64 flex items-center justify-center">
-              <img id="imagePreview" src="#" alt="Preview" class="max-w-full max-h-full">
-              <button id="removeImage" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-            
-            <div id="uploadPlaceholder" class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-pink-500 transition-colors h-64 flex flex-col items-center justify-center">
-              <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
-              <p class="text-gray-300 mb-2">Drag and drop your image here</p>
-              <p class="text-gray-500 text-sm mb-4">- or -</p>
-              <label class="px-4 py-2 rounded-md bg-pink-500 text-white hover:bg-pink-600 transition-colors cursor-pointer">
-                Browse Files
-                <input type="file" id="imageUpload" class="hidden" accept="image/*">
-              </label>
-            </div>
-          </div>
-          
-          <div class="mb-4">
-            <label class="block text-gray-300 mb-2">Transformation Prompt:</label>
-            <textarea id="transformPrompt" rows="4" class="w-full bg-gray-700 border border-gray-600 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder=""></textarea>
-          </div>
-          
-          <div class="mb-6 bg-gray-700 p-4 rounded-lg prompt-tip">
-            <h4 class="font-semibold mb-2 text-pink-400">Prompt Tips:</h4>
-            <p class="text-gray-300 text-sm mb-2">For best results, include these elements in your prompt:</p>
-            <ul class="text-gray-300 text-sm list-disc pl-5 space-y-1">
-              <li>Reference to "the same person in the input image"</li>
-              <li>Specific outfit description (color, fabric, style)</li>
-              <li>Preservation of face and identity</li>
-              <li>Quality descriptors (photorealistic, DSLR quality)</li>
-              <li>Lighting and setting details</li>
-            </ul>
-             <!-- edited by parth-->
-            <p class="text-gray-400 text-xs mt-2">Example: "A full-body photograph of the same person in the input image, wearing a traditional Indian sherwani, detailed realistic style, same face, short hair, brown eyes, natural smile, outdoor lighting"</p>
-          </div>
-          
-          <button id="generateButton" class="w-full py-3 rounded-md bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-pink-400 disabled:opacity-50">
-            Generate Cultural Outfit Image
-          </button>
-          
-          <!-- Generated Image Result Section - Added directly below the generate button -->
-          <div id="generatedResults" class="mt-8 hidden">
-            <h3 class="text-xl font-bold mb-4 text-center">Your Cultural Transformation</h3>
-            
-            <div class="flex flex-col md:flex-row gap-4 justify-between">
-              <!-- Original Image Column -->
-              <div class="w-full md:w-1/2">
-                <div class="bg-gray-900 p-3 rounded-lg shadow-lg">
-                  <h4 class="text-lg font-semibold mb-2 text-center">Original</h4>
-                  <div class="h-64 flex items-center justify-center overflow-hidden rounded-lg">
-                    <img id="originalImageDisplay" src="#" alt="Original uploaded image" class="max-w-full max-h-full">
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Generated Image Column -->
-              <div class="w-full md:w-1/2">
-                <div class="bg-gray-900 p-3 rounded-lg shadow-lg">
-                  <h4 class="text-lg font-semibold mb-2 text-center">AI-Generated Outfit</h4>
-                  <div class="generated-image h-64 relative rounded-lg">
-                    <div class="loading-overlay">
-                      <div class="spinner"></div>
-                      <p class="text-white">Generating your cultural outfit...</p>
-                    </div>
-                    <img id="generatedImage" src="#" alt="AI-generated outfit" class="max-w-full max-h-full mx-auto">
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Image Action Buttons -->
-            <div class="mt-4 flex justify-center gap-4">
-              <button id="downloadButton" class="px-5 py-2 rounded-md bg-pink-500 text-white hover:bg-pink-600 transition-colors">
-                <i class="fas fa-download mr-2"></i> Download
-              </button>
-              <button id="shareButton" class="px-5 py-2 rounded-md border border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors">
-                <i class="fas fa-share-alt mr-2"></i> Share
-              </button>
-              <button id="tryAgainButton" class="px-5 py-2 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">
-                <i class="fas fa-redo mr-2"></i> Try Another
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+/* Generated image wrapper */
+.generated-image {
+  position: relative;
+  display: none;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 2px solid #374151;
+}
 
-  <!-- Prompt Learning Section -->
-  <section class="py-16">
-    <div class="container mx-auto px-4">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold mb-4">Master the Art of Outfit Prompts</h2>
-        <p class="text-gray-400 max-w-2xl mx-auto">Learn how to create effective prompts for stunning cultural outfit transformations</p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-          <div class="text-pink-500 text-3xl mb-4">
-            <i class="fas fa-palette"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3">Describe Outfit Details</h3>
-          <p class="text-gray-400">Be specific about colors, patterns, fabrics, and cultural elements. For example, "royal blue silk saree with gold zari border" or "cream sherwani with maroon embroidery."</p>
-        </div>
-        
-        <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-          <div class="text-pink-500 text-3xl mb-4">
-            <i class="fas fa-user-check"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3">Preserve Identity</h3>
-          <p class="text-gray-400">Always include phrases like "preserving the face and identity of the person in the input image" to maintain resemblance and personal features.</p>
-        </div>
-        
-        <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-          <div class="text-pink-500 text-3xl mb-4">
-            <i class="fas fa-camera"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3">Specify Quality</h3>
-          <p class="text-gray-400">Include terms like "photorealistic," "high resolution," "professional photography," and "studio lighting" for better visual quality.</p>
-        </div>
-        
-        <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-          <div class="text-pink-500 text-3xl mb-4">
-            <i class="fas fa-map-marked-alt"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3">Add Cultural Context</h3>
-          <p class="text-gray-400">Mention the specific region or occasion to enhance authenticity. For example, "dressed for a South Indian wedding" or "celebrating Diwali in a traditional Gujarati style."</p>
-        </div>
-        
-        <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-          <div class="text-pink-500 text-3xl mb-4">
-            <i class="fas fa-gem"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3">Include Accessories</h3>
-          <p class="text-gray-400">Don't forget to mention traditional jewelry, headwear, or other accessories that complete the cultural look, like "with a kundan necklace" or "wearing a traditional pagdi."</p>
-        </div>
-        
-        <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-          <div class="text-pink-500 text-3xl mb-4">
-            <i class="fas fa-magic"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3">Sample Prompt Template</h3>
-          <p class="text-gray-400 mb-2">Copy and customize this proven template:</p>
-          <div class="bg-gray-900 p-3 rounded text-sm text-gray-300 overflow-x-auto">
-            "A full-body photograph of the same person in the input image, same face, same expression, same pose, wearing a [dress], with the same background, photorealistic, DSLR quality"
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+/* Loading overlay */
+.loading-overlay {
+  position: absolute;
+  inset: 0; /* shorthand for top/left/right/bottom 0 */
+  background: rgba(17, 24, 39, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 10;
+}
 
-  //added by parth 
-    <!-- Features Section -->
-    <section class="py-16 bg-gray-800">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-12">Explore Indian Cultural Heritage</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="bg-gray-900 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-700">
-            <div class="text-pink-500 text-3xl mb-4">
+/* Spinner */
+.spinner {
+  border: 4px solid rgba(236, 72, 153, 0.3);
+  border-radius: 50%;
+  border-top: 4px solid #ec4899;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 12px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive search input */
+.nav-search-input {
+  width: 100%;
+  max-width: clamp(250px, 30vw, 400px); /* flexible but capped */
+}
+
+    </style>
+  </head>
+  <body class="bg-gray-900 text-white font-sans antialiased">
+    <!-- Navbar -->
+    <nav
+      id="navbar"
+      class="fixed w-full z-10 transition-all duration-300 ease-in-out py-4 bg-gray-900 bg-opacity-90 backdrop-filter backdrop-blur-lg"
+    >
+      <div class="container mx-auto px-6 flex items-center justify-between">
+        <!-- Left: Logo + Links -->
+        <div class="flex items-center space-x-6">
+          <div class="flex items-center space-x-2">
+            <div class="text-pink-500 text-2xl">
               <i class="fas fa-tshirt"></i>
             </div>
-            <h3 class="text-xl font-bold mb-3">Traditional Outfits</h3>
-            <p class="text-gray-400">Experience the beauty of saris, lehengas, kurta pajamas, and more from different regions of India.</p>
+            <a href="index.html" class="text-xl font-bold"
+              >Vastra<span class="text-pink-500">Verse</span></a
+            >
           </div>
-          
-          <div class="bg-gray-900 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-700">
-            <div class="text-pink-500 text-3xl mb-4">
-              <i class="fas fa-calendar-alt"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3">Festival Guide</h3>
-            <p class="text-gray-400">Discover when and how festivals like Diwali, Holi, and Navaratri are celebrated across India.</p>
+
+          <div class="hidden md:flex items-center space-x-6">
+            <a href="index.html" class="hover:text-pink-500 transition-colors"
+              >Home</a
+            >
+            <a href="about.html" class="hover:text-pink-500 transition-colors"
+              >About</a
+            >
+            <a href="chatbot.html" class="hover:text-pink-500 transition-colors"
+              >Chatbot</a
+            >
           </div>
-          
-          <div class="bg-gray-900 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-700">
-            <div class="text-pink-500 text-3xl mb-4">
-              <i class="fas fa-robot"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3">AI Assistant</h3>
-            <p class="text-gray-400">Get personalized recommendations and learn about outfit components with our culture-savvy chatbot.</p>
+        </div>
+
+        <!-- Right Section: Search + Settings + Auth -->
+        <div class="flex items-center space-x-6 flex-1 justify-end">
+          <div class="flex items-center space-x-4 flex-shrink">
+            <!-- Search Bar -->
+            <form
+              class="w-full max-w-xs min-w-[120px] flex-shrink"
+              role="search"
+              aria-label="Site search"
+              onsubmit="return false;"
+            >
+              <input
+                type="search"
+                class="w-full px-4 py-2 rounded-full text-gray-800"
+                placeholder="🔍 Search here..."
+                aria-label="Search"
+              />
+            </form>
+            <!-- Settings Icon -->
+            <button
+              id="themeToggle"
+              class="hover:text-pink-500 transition-colors"
+            >
+              <i class="fas fa-sun"></i>
+            </button>
+          </div>
+
+          <!-- Auth Buttons -->
+        <div class="auth-buttons flex items-center space-x-4">
+  <!-- Login Button -->
+  <a
+    href="login.html"
+    class="px-4 py-2 rounded-full border border-pink-500 text-pink-500 
+           hover:bg-pink-500 hover:text-white 
+           focus:bg-pink-500 focus:text-white 
+           transition-colors 
+           no-underline outline-none focus:outline-none"
+  >
+    Login
+  </a>
+
+  <!-- Sign Up Button -->
+  <a
+    href="signup.html"
+    class="px-4 py-2 rounded-full bg-pink-500 text-white 
+           hover:bg-pink-600 
+           active:bg-transparent active:text-pink-500 active:border-pink-500
+           focus:bg-transparent focus:text-pink-500 focus:border-pink-500
+           transition-colors hidden md:block border border-transparent 
+           no-underline outline-none focus:outline-none"
+  >
+    Sign Up
+  </a>
+</div>
+
+
+
+          <!-- Mobile Menu Button -->
+          <button
+            id="mobileMenuBtn"
+            class="md:hidden text-gray-200 hover:text-pink-500"
+          >
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="md:hidden bg-gray-800 hidden w-full mt-2">
+        <div class="container mx-auto px-4 py-4 flex flex-col space-y-3">
+          <a
+            href="index.html"
+            class="block py-2 hover:text-pink-500 transition-colors"
+            >Home</a
+          >
+          <a
+            href="about.html"
+            class="block py-2 hover:text-pink-500 transition-colors"
+            >About</a
+          >
+          <a
+            href="chatbot.html"
+            class="block py-2 hover:text-pink-500 transition-colors"
+            >Chatbot</a
+          >
+          <button
+            class="px-4 py-2 rounded-full bg-pink-500 text-white hover:bg-pink-600 transition-colors w-full mt-2"
+          >
+            Sign Up
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      id="hero"
+      class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8"
+    >
+      <div
+        class="container mx-auto flex flex-col items-center justify-center text-center"
+      >
+        <div class="animate-fade-in-up space-y-4 sm:space-y-6">
+          <h1
+            class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-pink-500"
+          >
+            Welcome to VastraVerse
+          </h1>
+          <p
+            class="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto"
+          >
+            A Cultural Dressing Virtual Photoshoot & Festival Guide Powered by
+            Generative AI
+          </p>
+          <p class="text-sm sm:text-base text-gray-400 max-w-2xl mx-auto">
+            Preserving heritage, reimagining tradition — through AI
+          </p>
+          <div class="flex flex-wrap gap-4 justify-center mt-4">
+            <a
+              href="#photoshoot"
+              class="px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-pink-400 shadow-lg w-full sm:w-auto text-center"
+            >
+              Get Started
+            </a>
+            <a
+              href="#learn-more"
+              class="px-6 py-3 rounded-full border border-pink-500 text-pink-500 hover:bg-pink-500 hover:bg-opacity-10 transition-colors focus:outline-none focus:ring-2 focus:ring-pink-400 w-full sm:w-auto text-center"
+            >
+              Learn More
+            </a>
           </div>
         </div>
       </div>
     </section>
-  
+
+    <!-- AI Virtual Photoshoot Section -->
+    <section
+      id="photoshoot"
+      class="min-h-screen flex items-center justify-center w-full px-4 md:px-0"
+      style="min-height: 100vh"
+    >
+      <div
+        class="container mx-auto flex flex-col items-center justify-center w-full h-full"
+      >
+        <div
+          class="w-full md:w-2/3 lg:w-1/2 animate-fade-in flex flex-col md:flex-row items-center justify-center gap-6 h-full"
+        >
+          <div
+            class="bg-gray-800 p-6 rounded-xl shadow-2xl border border-gray-700 w-full max-w-2xl mx-auto"
+          >
+            <div class="text-center mb-6">
+              <h2 class="text-2xl font-semibold">AI Virtual Photoshoot</h2>
+              <p class="text-gray-400">
+                Transform your photo with traditional Indian outfits
+              </p>
+            </div>
+
+            <!-- Original Image Upload Section -->
+            <div class="mb-6">
+              <div
+                id="imagePreviewContainer"
+                class="relative hidden mb-4 rounded-lg overflow-hidden bg-gray-700 h-64 flex items-center justify-center"
+              >
+                <img
+                  id="imagePreview"
+                  src="#"
+                  alt="Preview"
+                  class="max-w-full max-h-full"
+                />
+                <button
+                  id="removeImage"
+                  class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center"
+                >
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+
+              <div
+                id="uploadPlaceholder"
+                class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-pink-500 transition-colors h-64 flex flex-col items-center justify-center"
+              >
+                <i
+                  class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"
+                ></i>
+                <p class="text-gray-300 mb-2">Drag and drop your image here</p>
+                <p class="text-gray-500 text-sm mb-4">- or -</p>
+                <label
+                  class="px-4 py-2 rounded-md bg-pink-500 text-white hover:bg-pink-600 transition-colors cursor-pointer"
+                >
+                  Browse Files
+                  <input
+                    type="file"
+                    id="imageUpload"
+                    class="hidden"
+                    accept="image/*"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-gray-300 mb-2"
+                >Transformation Prompt:</label
+              >
+              <textarea
+                id="transformPrompt"
+                rows="4"
+                class="w-full bg-gray-700 border border-gray-600 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-pink-500"
+                placeholder=""
+              ></textarea>
+            </div>
+
+            <div class="mb-6 bg-gray-700 p-4 rounded-lg prompt-tip">
+              <h4 class="font-semibold mb-2 text-pink-400">Prompt Tips:</h4>
+              <p class="text-gray-300 text-sm mb-2">
+                For best results, include these elements in your prompt:
+              </p>
+              <ul class="text-gray-300 text-sm list-disc pl-5 space-y-1">
+                <li>Reference to "the same person in the input image"</li>
+                <li>Specific outfit description (color, fabric, style)</li>
+                <li>Preservation of face and identity</li>
+                <li>Quality descriptors (photorealistic, DSLR quality)</li>
+                <li>Lighting and setting details</li>
+              </ul>
+              <p class="text-gray-400 text-xs mt-2">
+                Example: "A full-body photograph of the same person in the input
+                image, wearing a traditional Indian sherwani, detailed realistic
+                style, same face, short hair, brown eyes, natural smile, outdoor
+                lighting"
+              </p>
+            </div>
+
+            <button
+              id="generateButton"
+              class="w-full py-3 rounded-md bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-pink-400 disabled:opacity-50"
+            >
+              Generate Cultural Outfit Image
+            </button>
+
+            <!-- Generated Image Result Section -->
+            <div id="generatedResults" class="mt-8 hidden">
+              <h3 class="text-xl font-bold mb-4 text-center">
+                Your Cultural Transformation
+              </h3>
+
+              <div class="flex flex-col md:flex-row gap-4 justify-between">
+                <!-- Original Image Column -->
+                <div class="w-full md:w-1/2">
+                  <div class="bg-gray-900 p-3 rounded-lg shadow-lg">
+                    <h4 class="text-lg font-semibold mb-2 text-center">
+                      Original
+                    </h4>
+                    <div
+                      class="h-64 md:h-80 flex items-center justify-center overflow-hidden rounded-lg"
+                    >
+                      <img
+                        id="originalImageDisplay"
+                        src="#"
+                        alt="Original uploaded image"
+                        class="max-w-full max-h-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Generated Image Column -->
+                <div class="w-full md:w-1/2">
+                  <div class="bg-gray-900 p-3 rounded-lg shadow-lg">
+                    <h4 class="text-lg font-semibold mb-2 text-center">
+                      AI-Generated Outfit
+                    </h4>
+                    <div
+                      class="generated-image h-64 md:h-80 relative rounded-lg"
+                    >
+                      <div class="loading-overlay">
+                        <div class="spinner"></div>
+                        <p class="text-white text-center">
+                          Generating your cultural outfit...
+                        </p>
+                      </div>
+                      <img
+                        id="generatedImage"
+                        src="#"
+                        alt="AI-generated outfit"
+                        class="max-w-full max-h-full mx-auto"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Image Action Buttons -->
+              <div class="mt-4 flex flex-wrap justify-center gap-4">
+                <button
+                  id="downloadButton"
+                  class="px-5 py-2 rounded-md bg-pink-500 text-white hover:bg-pink-600 transition-colors w-full sm:w-auto text-center"
+                >
+                  <i class="fas fa-download mr-2"></i> Download
+                </button>
+                <button
+                  id="shareButton"
+                  class="px-5 py-2 rounded-md border border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors w-full sm:w-auto text-center"
+                >
+                  <i class="fas fa-share-alt mr-2"></i> Share
+                </button>
+                <button
+                  id="tryAgainButton"
+                  class="px-5 py-2 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors w-full sm:w-auto text-center"
+                >
+                  <i class="fas fa-redo mr-2"></i> Try Another
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Prompt Learning Section -->
+    <section class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold mb-4">
+            Master the Art of Outfit Prompts
+          </h2>
+          <p class="text-gray-400 max-w-2xl mx-auto">
+            Learn how to create effective prompts for stunning cultural outfit
+            transformations
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Each tip card remains the same but fully responsive -->
+          <div
+            class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700"
+          >
+            <div class="text-pink-500 text-3xl mb-4">
+              <i class="fas fa-palette"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Describe Outfit Details</h3>
+            <p class="text-gray-400">
+              Be specific about colors, patterns, fabrics, and cultural
+              elements. For example, "royal blue silk saree with gold zari
+              border" or "cream sherwani with maroon embroidery."
+            </p>
+          </div>
+          <div
+            class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700"
+          >
+            <div class="text-pink-500 text-3xl mb-4">
+              <i class="fas fa-user-check"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Preserve Identity</h3>
+            <p class="text-gray-400">
+              Always include phrases like "preserving the face and identity of
+              the person in the input image" to maintain resemblance and
+              personal features.
+            </p>
+          </div>
+          <div
+            class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700"
+          >
+            <div class="text-pink-500 text-3xl mb-4">
+              <i class="fas fa-camera"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Specify Quality</h3>
+            <p class="text-gray-400">
+              Include terms like "photorealistic," "high resolution,"
+              "professional photography," and "studio lighting" for better
+              visual quality.
+            </p>
+          </div>
+          <div
+            class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700"
+          >
+            <div class="text-pink-500 text-3xl mb-4">
+              <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Add Cultural Context</h3>
+            <p class="text-gray-400">
+              Mention the specific region or occasion to enhance authenticity.
+              For example, "dressed for a South Indian wedding" or "celebrating
+              Diwali in a traditional Gujarati style."
+            </p>
+          </div>
+          <div
+            class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700"
+          >
+            <div class="text-pink-500 text-3xl mb-4">
+              <i class="fas fa-gem"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Include Accessories</h3>
+            <p class="text-gray-400">
+              Don't forget to mention traditional jewelry, headwear, or other
+              accessories that complete the cultural look, like "with a kundan
+              necklace" or "wearing a traditional pagdi."
+            </p>
+          </div>
+          <div
+            class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700"
+          >
+            <div class="text-pink-500 text-3xl mb-4">
+              <i class="fas fa-magic"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Sample Prompt Template</h3>
+            <p class="text-gray-400 mb-2">
+              Copy and customize this proven template:
+            </p>
+            <div
+              class="bg-gray-900 p-3 rounded text-sm text-gray-300 overflow-x-auto"
+            >
+              "A full-body photograph of the same person in the input image,
+              same face, same expression, same pose, wearing a [dress], with the
+              same background, photorealistic, DSLR quality"
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gray-800">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">
+          Explore Indian Cultural Heritage
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Each feature card -->
+          <div
+            class="bg-gray-900 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-700"
+          >
+            <div class="text-pink-500 text-3xl mb-4">
+              <i class="fas fa-tshirt"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Traditional Outfits</h3>
+            <p class="text-gray-400">
+              Experience the beauty of saris, lehengas, kurta pajamas, and more
+              from different regions of India.
+            </p>
+          </div>
+          <div
+            class="bg-gray-900 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-700"
+          >
+            <div class="text-pink-500 text-3xl mb-4">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Festival Guide</h3>
+            <p class="text-gray-400">
+              Discover when and how festivals like Diwali, Holi, and Navaratri
+              are celebrated across India.
+            </p>
+          </div>
+          <div
+            class="bg-gray-900 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-700"
+          >
+            <div class="text-pink-500 text-3xl mb-4">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">AI Assistant</h3>
+            <p class="text-gray-400">
+              Get personalized recommendations and learn about outfit components
+              with our culture-savvy chatbot.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
     <!-- Cultural Guide Section -->
     <section class="py-16">
       <div class="container mx-auto px-4">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold mb-4">Upcoming Indian Festivals</h2>
-          <p class="text-gray-400 max-w-2xl mx-auto">Discover the rich cultural tapestry of India through its vibrant celebrations</p>
+          <p class="text-gray-400 max-w-2xl mx-auto">
+            Discover the rich cultural tapestry of India through its vibrant
+            celebrations
+          </p>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105">
-            <div class="h-48 bg-gradient-to-r from-yellow-500 to-red-500 relative">
+          <div
+            class="bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105"
+          >
+            <div
+              class="h-48 bg-gradient-to-r from-yellow-500 to-red-500 relative"
+            >
               <div class="absolute inset-0 flex items-center justify-center">
                 <i class="fas fa-diya text-white text-5xl"></i>
               </div>
@@ -360,15 +622,25 @@
                 <h3 class="text-xl font-bold">Diwali</h3>
                 <span class="text-sm text-pink-500">October 31, 2025</span>
               </div>
-              <p class="text-gray-400 mb-4">The festival of lights celebrates the triumph of light over darkness with diyas, rangoli, and festive attire.</p>
-              <a href="Indian Festivals.html" class="text-pink-500 hover:text-pink-400 inline-flex items-center">
+              <p class="text-gray-400 mb-4">
+                The festival of lights celebrates the triumph of light over
+                darkness with diyas, rangoli, and festive attire.
+              </p>
+              <a
+                href="Indian Festivals.html"
+                class="text-pink-500 hover:text-pink-400 inline-flex items-center"
+              >
                 Learn more <i class="fas fa-arrow-right ml-2"></i>
               </a>
             </div>
           </div>
-          
-          <div class="bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105">
-            <div class="h-48 bg-gradient-to-r from-pink-500 to-purple-600 relative">
+
+          <div
+            class="bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105"
+          >
+            <div
+              class="h-48 bg-gradient-to-r from-pink-500 to-purple-600 relative"
+            >
               <div class="absolute inset-0 flex items-center justify-center">
                 <i class="fas fa-dharmachakra text-white text-5xl"></i>
               </div>
@@ -378,15 +650,25 @@
                 <h3 class="text-xl font-bold">Navaratri</h3>
                 <span class="text-sm text-pink-500">October 3-12, 2025</span>
               </div>
-              <p class="text-gray-400 mb-4">Nine nights dedicated to Goddess Durga, featuring traditional garba and dandiya raas dances.</p>
-              <a href="Indian Festivals.html" class="text-pink-500 hover:text-pink-400 inline-flex items-center">
+              <p class="text-gray-400 mb-4">
+                Nine nights dedicated to Goddess Durga, featuring traditional
+                garba and dandiya raas dances.
+              </p>
+              <a
+                href="Indian Festivals.html"
+                class="text-pink-500 hover:text-pink-400 inline-flex items-center"
+              >
                 Learn more <i class="fas fa-arrow-right ml-2"></i>
               </a>
             </div>
           </div>
-          
-          <div class="bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105">
-            <div class="h-48 bg-gradient-to-r from-blue-500 to-green-500 relative">
+
+          <div
+            class="bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105"
+          >
+            <div
+              class="h-48 bg-gradient-to-r from-blue-500 to-green-500 relative"
+            >
               <div class="absolute inset-0 flex items-center justify-center">
                 <i class="fas fa-water text-white text-5xl"></i>
               </div>
@@ -396,344 +678,452 @@
                 <h3 class="text-xl font-bold">Holi</h3>
                 <span class="text-sm text-pink-500">March 14, 2026</span>
               </div>
-              <p class="text-gray-400 mb-4">The festival of colors welcomes spring with vibrant powder colors, water games, and sweet treats.</p>
-              <a href="Indian Festivals.html" class="text-pink-500 hover:text-pink-400 inline-flex items-center">
+              <p class="text-gray-400 mb-4">
+                The festival of colors welcomes spring with vibrant powder
+                colors, water games, and sweet treats.
+              </p>
+              <a
+                href="Indian Festivals.html"
+                class="text-pink-500 hover:text-pink-400 inline-flex items-center"
+              >
                 Learn more <i class="fas fa-arrow-right ml-2"></i>
               </a>
             </div>
           </div>
         </div>
-        
+
         <div class="text-center mt-10">
-          <a href="Indian Festivals.html" class="px-6 py-3 rounded-full border border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors inline-flex items-center">
+          <a
+            href="Indian Festivals.html"
+            class="px-6 py-3 rounded-full border border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors inline-flex items-center"
+          >
             View All Festivals <i class="fas fa-arrow-right ml-2"></i>
           </a>
         </div>
       </div>
     </section>
-  
-    <!-- Call to Action -->
-  <section class="py-20 bg-gradient-to-r from-pink-500 to-purple-600">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl font-bold mb-6">Ready to Experience Indian Cultural Fashion?</h2>
-      <p class="text-xl mb-8 max-w-2xl mx-auto">Join thousands of users exploring and celebrating the rich diversity of Indian traditions</p>
-      <div class="flex flex-wrap justify-center gap-4">
-        <a href="index.html" class="px-8 py-3 rounded-full bg-white text-pink-600 hover:bg-gray-100 transition-colors font-medium">
-          Try it Free
-        </a>
-        <a href="about.html" class="px-8 py-3 rounded-full border-2 border-white text-white hover:bg-white hover:bg-opacity-10 transition-colors font-medium">
-          Learn More
-        </a>
-      </div>
-    </div>
-  </section>
-  
-    
 
- 
-  <!-- Footer -->
-  <footer class="bg-gray-900 pt-16 pb-8">
-    <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-        <div>
-          <div class="flex items-center space-x-2 mb-4">
-            <div class="text-pink-500 text-2xl"><i class="fas fa-tshirt"></i></div>
-            <div class="text-xl font-bold">Vastra<span class="text-pink-500">Verse</span></div>
-          </div>
-          <p class="text-gray-400 mb-4">Celebrating the rich diversity of Indian traditional fashion and culture through AI innovation.</p>
-          <div class="flex space-x-4">
-            <a href="#" class="text-gray-400 hover:text-pink-500 transition-colors">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="text-gray-400 hover:text-pink-500 transition-colors">
-              <i class="fab fa-twitter"></i>
-            </a>
-            <a href="#" class="text-gray-400 hover:text-pink-500 transition-colors">
-              <i class="fab fa-instagram"></i>
-            </a>
-            <a href="#" class="text-gray-400 hover:text-pink-500 transition-colors">
-              <i class="fab fa-youtube"></i>
-            </a>
-          </div>
+    <!-- Call to Action Section -->
+    <section class="py-20 bg-gradient-to-r from-pink-500 to-purple-600">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-6">
+          Ready to Experience Indian Cultural Fashion?
+        </h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">
+          Join thousands of users exploring and celebrating the rich diversity
+          of Indian traditions
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a
+            href="index.html"
+            class="px-8 py-3 rounded-full bg-white text-pink-600 hover:bg-gray-100 transition-colors font-medium"
+          >
+            Try it Free
+          </a>
+          <a
+            href="about.html"
+            class="px-8 py-3 rounded-full border-2 border-white text-white hover:bg-white hover:bg-opacity-10 transition-colors font-medium"
+          >
+            Learn More
+          </a>
         </div>
-        
-        <div>
-          <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
-          <ul class="space-y-2">
-            <li><a href="index.html" class="text-gray-400 hover:text-pink-500 transition-colors">Home</a></li>
-            <li><a href="about.html" class="text-gray-400 hover:text-pink-500 transition-colors">About Us</a></li>
-            <li><a href="chatbot.html" class="text-gray-400 hover:text-pink-500 transition-colors">AI Chatbot</a></li>
-            <li><a href="Festival Calendar.html" class="text-gray-400 hover:text-pink-500 transition-colors">Festival Calendar</a></li>
-            <li><a href="Traditional Outfits.html" class="text-gray-400 hover:text-pink-500 transition-colors">Traditional Outfits</a></li>
-          </ul>
-        </div>
-        
-        <div>
-          <h4 class="text-lg font-semibold mb-4">Resources</h4>
-          <ul class="space-y-2">
-            <li><a href="blog.html" class="text-gray-400 hover:text-pink-500 transition-colors">Blog</a></li>
-            <li><a href="Cultural Guides.html" class="text-gray-400 hover:text-pink-500 transition-colors">Cultural Guides</a></li>
-            <li><a href="Outfit Dictionary.html" class="text-gray-400 hover:text-pink-500 transition-colors">Outfit Dictionary</a></li>
-            <li><a href="Regional Styles.html" class="text-gray-400 hover:text-pink-500 transition-colors">Regional Styles</a></li>
-            <li><a href="FAQ.html" class="text-gray-400 hover:text-pink-500 transition-colors">FAQ</a></li>
-          </ul>
-        </div>
-        
-        <div>
-          <h4 class="text-lg font-semibold mb-4">Subscribe to Our Newsletter</h4>
-          <p class="text-gray-400 mb-4">Stay updated with the latest festival guides and traditional fashion trends</p>
-          <form class="mb-4">
-            <div class="flex">
-              <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 w-full">
-              <button type="submit" class="px-4 py-2 bg-pink-500 text-white rounded-r-md hover:bg-pink-600 transition-colors">
-                <i class="fas fa-paper-plane"></i>
-              </button>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 pt-16 pb-8">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <div class="text-pink-500 text-2xl">
+                <i class="fas fa-tshirt"></i>
+              </div>
+              <div class="text-xl font-bold">
+                Vastra<span class="text-pink-500">Verse</span>
+              </div>
             </div>
-          </form>
+            <p class="text-gray-400 mb-4">
+              Celebrating the rich diversity of Indian traditional fashion and
+              culture through AI innovation.
+            </p>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="text-gray-400 hover:text-pink-500 transition-colors"
+              >
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-pink-500 transition-colors"
+              >
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-pink-500 transition-colors"
+              >
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-pink-500 transition-colors"
+              >
+                <i class="fab fa-youtube"></i>
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="index.html"
+                  class="text-gray-400 hover:text-pink-500 transition-colors"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="about.html"
+                  class="text-gray-400 hover:text-pink-500 transition-colors"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chatbot.html"
+                  class="text-gray-400 hover:text-pink-500 transition-colors"
+                  >AI Chatbot</a
+                >
+              </li>
+              <li>
+                <a
+                  href="Festival Calendar.html"
+                  class="text-gray-400 hover:text-pink-500 transition-colors"
+                  >Festival Calendar</a
+                >
+              </li>
+              <li>
+                <a
+                  href="Traditional Outfits.html"
+                  class="text-gray-400 hover:text-pink-500 transition-colors"
+                  >Traditional Outfits</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Resources</h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="blog.html"
+                  class="text-gray-400 hover:text-pink-500 transition-colors"
+                  >Blog</a
+                >
+              </li>
+              <li>
+                <a
+                  href="Cultural Guides.html"
+                  class="text-gray-400 hover:text-pink-500 transition-colors"
+                  >Cultural Guides</a
+                >
+              </li>
+              <li>
+                <a
+                  href="Outfit Dictionary.html"
+                  class="text-gray-400 hover:text-pink-500 transition-colors"
+                  >Outfit Dictionary</a
+                >
+              </li>
+              <li>
+                <a
+                  href="Regional Styles.html"
+                  class="text-gray-400 hover:text-pink-500 transition-colors"
+                  >Regional Styles</a
+                >
+              </li>
+              <li>
+                <a
+                  href="FAQ.html"
+                  class="text-gray-400 hover:text-pink-500 transition-colors"
+                  >FAQ</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-4">
+              Subscribe to Our Newsletter
+            </h4>
+            <p class="text-gray-400 mb-4">
+              Stay updated with the latest festival guides and traditional
+              fashion trends
+            </p>
+            <form class="mb-4">
+              <div class="flex">
+                <input
+                  type="email"
+                  placeholder="Your email"
+                  class="px-4 py-2 rounded-l-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 w-full"
+                />
+                <button
+                  type="submit"
+                  class="px-4 py-2 bg-pink-500 text-white rounded-r-md hover:bg-pink-600 transition-colors"
+                >
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
+          <p>&copy; 2025 VastraVerse. All rights reserved.</p>
         </div>
       </div>
-      
-      <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
-        <p>&copy; 2025 VastraVerse All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
- 
+    </footer>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-  // ... (keep all previous variable declarations)
- // Image upload handling
- const imageUpload = document.getElementById('imageUpload');
-      const imagePreview = document.getElementById('imagePreview');
-      const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-      const uploadPlaceholder = document.getElementById('uploadPlaceholder');
-      const removeImage = document.getElementById('removeImage');
-      const transformPrompt = document.getElementById('transformPrompt');
-      const generateButton = document.getElementById('generateButton');
-      const generatedResults = document.getElementById('generatedResults');
-      const originalImageDisplay = document.getElementById('originalImageDisplay');
-      const generatedImage = document.getElementById('generatedImage');
-      const generatedImageContainer = document.querySelector('.generated-image');
-      const loadingOverlay = document.querySelector('.loading-overlay');
-      const downloadButton = document.getElementById('downloadButton');
-      const shareButton = document.getElementById('shareButton');
-      const tryAgainButton = document.getElementById('tryAgainButton');
-        
-      let uploadedImage = null;
-    //edit by parth  
-  // Default prompt template
-  const defaultPrompt = "A full-body photograph of the same person in the input image, wearing a traditional Indian sherwani, detailed realistic style, same face, short hair, brown eyes, natural smile, outdoor lighting";
-  
-  // Set up prompt textarea
-  transformPrompt.value = defaultPrompt;
-  transformPrompt.style.color = '#999'; // Gray placeholder color
+    <!--Script Section-->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Element references
+        const imageUpload = document.getElementById("imageUpload");
+        const imagePreview = document.getElementById("imagePreview");
+        const imagePreviewContainer = document.getElementById(
+          "imagePreviewContainer"
+        );
+        const uploadPlaceholder = document.getElementById("uploadPlaceholder");
+        const removeImage = document.getElementById("removeImage");
+        const transformPrompt = document.getElementById("transformPrompt");
+        const generateButton = document.getElementById("generateButton");
+        const originalImageDisplay = document.getElementById(
+          "originalImageDisplay"
+        );
 
-  transformPrompt.addEventListener('focus', function() {
-    if (this.value === defaultPrompt) {
-      this.value = '';
-      this.style.color = ''; // Reset to default text color
-    }
-  });
+        let uploadedImage = null;
 
-  transformPrompt.addEventListener('blur', function() {
-    if (this.value.trim() === '') {
-      this.value = defaultPrompt;
-      this.style.color = '#999';
-    }
-  });
+        // Default prompt template
+        const defaultPrompt =
+          "A full-body photograph of the same person in the input image, wearing a traditional Indian sherwani, detailed realistic style, same face, short hair, brown eyes, natural smile, outdoor lighting";
 
-   
-      // Handle file upload
-      imageUpload.addEventListener('change', function(e) {
-        if (e.target.files.length > 0) {
-          const file = e.target.files[0];
-          uploadedImage = file;
-          
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            imagePreview.src = e.target.result;
-            originalImageDisplay.src = e.target.result;
-            imagePreviewContainer.classList.remove('hidden');
-            uploadPlaceholder.classList.add('hidden');
-            
-            // Enable generate button if both image and prompt are available
-            if (transformPrompt.value.trim() !== '') {
-              generateButton.disabled = false;
-            }
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-      
-      // Handle drag and drop
-      uploadPlaceholder.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        uploadPlaceholder.classList.add('border-pink-500');
-      });
-      
-      uploadPlaceholder.addEventListener('dragleave', function() {
-        uploadPlaceholder.classList.remove('border-pink-500');
-      });
-      
-      uploadPlaceholder.addEventListener('drop', function(e) {
-        e.preventDefault();
-        uploadPlaceholder.classList.remove('border-pink-500');
-        
-        if (e.dataTransfer.files.length > 0) {
-          imageUpload.files = e.dataTransfer.files;
-          const event = new Event('change');
-          imageUpload.dispatchEvent(event);
-        }
-      });
-      
-      // Handle click on upload placeholder
-      
-      
-      // Handle remove image
-      removeImage.addEventListener('click', function() {
-        imageUpload.value = '';
-        imagePreview.src = '#';
-        originalImageDisplay.src = '#';
-        imagePreviewContainer.classList.add('hidden');
-        uploadPlaceholder.classList.remove('hidden');
-        uploadedImage = null;
-        generateButton.disabled = true;
-      });
-      
-      // Enable/disable generate button based on prompt
-      transformPrompt.addEventListener('input', function() {
-        if (uploadedImage && transformPrompt.value.trim() !== '') {
-          generateButton.disabled = false;
-        } else {
-          generateButton.disabled = true;
-        }
-      });
-      
-      // Handle generate button click
-      generateButton.addEventListener('click', function() {
-        if (!uploadedImage || transformPrompt.value.trim() === '') {
-          alert('Please upload an image and provide a transformation prompt.');
-          return;
-        }
-        
-        // Show results section and loading state
-        generatedResults.classList.remove('hidden');
-        generatedImageContainer.style.display = 'block';
-        loadingOverlay.style.display = 'flex';
-        generateButton.disabled = true;
-        
-        // Scroll to results
-        setTimeout(() => {
-          generatedResults.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-        
-        // Create form data for API request
-        const formData = new FormData();
-        formData.append('image', uploadedImage);
-        formData.append('prompt', transformPrompt.value);
-        
-        // Send request to backend
-        fetch('/generate', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
+        // Initialize prompt textarea
+        transformPrompt.value = defaultPrompt;
+        transformPrompt.style.color = "#999";
+
+        transformPrompt.addEventListener("focus", function () {
+          if (this.value === defaultPrompt) {
+            this.value = "";
+            this.style.color = ""; // Reset to default text color
           }
-          return response.blob();
-        })
-        .then(blob => {
-          // Display generated image
-          const imageUrl = URL.createObjectURL(blob);
-          generatedImage.src = imageUrl;
-          loadingOverlay.style.display = 'none';
-          generateButton.disabled = false;
-          
-          // Set up download button
-          downloadButton.onclick = function() {
-            const a = document.createElement('a');
-            a.href = imageUrl;
-            a.download = 'vastraverse_outfit.png';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-          };
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          loadingOverlay.innerHTML = `<p class="text-red-500">Error: ${error.message}</p><p class="text-white mt-2">Please try again.</p>`;
-          generateButton.disabled = false;
         });
-      });
-      
-      // Handle share button
-      shareButton.addEventListener('click', function() {
-        if (navigator.share) {
-          // Use Web Share API if available
-          fetch(generatedImage.src)
-            .then(res => res.blob())
-            .then(blob => {
-              const file = new File([blob], 'vastraverse_outfit.png', { type: 'image/png' });
-              navigator.share({
-                title: 'My VastraVerse Cultural Outfit',
-                text: 'Check out my AI-generated cultural outfit from VastraVerse!',
-                files: [file]
-              }).catch(console.error);
+
+        transformPrompt.addEventListener("blur", function () {
+          if (this.value.trim() === "") {
+            this.value = defaultPrompt;
+            this.style.color = "#999";
+          }
+        });
+
+        // Handle file upload
+        imageUpload.addEventListener("change", function (e) {
+          if (e.target.files.length > 0) {
+            uploadedImage = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              imagePreview.src = e.target.result;
+              originalImageDisplay.src = e.target.result;
+              imagePreviewContainer.classList.remove("hidden");
+              uploadPlaceholder.classList.add("hidden");
+
+              // Enable generate button if prompt is not empty
+              if (transformPrompt.value.trim() !== "") {
+                generateButton.disabled = false;
+              }
+            };
+            reader.readAsDataURL(uploadedImage);
+          }
+        });
+
+        // Drag & drop handling
+        uploadPlaceholder.addEventListener("dragover", function (e) {
+          e.preventDefault();
+          uploadPlaceholder.classList.add("border-pink-500");
+        });
+
+        uploadPlaceholder.addEventListener("dragleave", function () {
+          uploadPlaceholder.classList.remove("border-pink-500");
+        });
+
+        uploadPlaceholder.addEventListener("drop", function (e) {
+          e.preventDefault();
+          uploadPlaceholder.classList.remove("border-pink-500");
+
+          if (e.dataTransfer.files.length > 0) {
+            imageUpload.files = e.dataTransfer.files;
+            const event = new Event("change");
+            imageUpload.dispatchEvent(event);
+          }
+        });
+
+        // Remove uploaded image
+        removeImage.addEventListener("click", function () {
+          imageUpload.value = "";
+          imagePreview.src = "#";
+          originalImageDisplay.src = "#";
+          imagePreviewContainer.classList.add("hidden");
+          uploadPlaceholder.classList.remove("hidden");
+          uploadedImage = null;
+          generateButton.disabled = true;
+        });
+        // Enable/disable generate button based on prompt
+        // Enable/disable generate button based on prompt
+        transformPrompt.addEventListener("input", function () {
+          if (uploadedImage && transformPrompt.value.trim() !== "") {
+            generateButton.disabled = false;
+          } else {
+            generateButton.disabled = true;
+          }
+        });
+
+        // Handle generate button click
+        generateButton.addEventListener("click", function () {
+          if (!uploadedImage || transformPrompt.value.trim() === "") {
+            alert(
+              "Please upload an image and provide a transformation prompt."
+            );
+            return;
+          }
+
+          // Show results section and loading state
+          generatedResults.classList.remove("hidden");
+          generatedImageContainer.style.display = "block";
+          loadingOverlay.style.display = "flex";
+          generateButton.disabled = true;
+
+          // Scroll to results
+          setTimeout(() => {
+            generatedResults.scrollIntoView({ behavior: "smooth" });
+          }, 100);
+
+          // Create form data for API request
+          const formData = new FormData();
+          formData.append("image", uploadedImage);
+          formData.append("prompt", transformPrompt.value);
+
+          // Send request to backend
+          fetch("/generate", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.blob();
+            })
+            .then((blob) => {
+              // Display generated image
+              const imageUrl = URL.createObjectURL(blob);
+              generatedImage.src = imageUrl;
+              loadingOverlay.style.display = "none";
+              generateButton.disabled = false;
+
+              // Set up download button
+              downloadButton.onclick = function () {
+                const a = document.createElement("a");
+                a.href = imageUrl;
+                a.download = "vastraverse_outfit.png";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+              };
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              loadingOverlay.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>
+                                <p class="text-white mt-2">Please try again.</p>`;
+              generateButton.disabled = false;
             });
-        } else {
-          // Fallback - copy image URL or show sharing options
-          alert('Sharing options not available. You can download the image and share it manually.');
-        }
-      });
-      
-      // Handle try again button
-      tryAgainButton.addEventListener('click', function() {
-        // Reset the form but keep the uploaded image
-        generatedResults.classList.add('hidden');
-        window.scrollTo({
-          top: document.getElementById('photoshoot').offsetTop,
-          behavior: 'smooth'
+        });
+
+        // Handle share button
+        shareButton.addEventListener("click", function () {
+          if (navigator.share) {
+            // Use Web Share API if available
+            fetch(generatedImage.src)
+              .then((res) => res.blob())
+              .then((blob) => {
+                const file = new File([blob], "vastraverse_outfit.png", {
+                  type: "image/png",
+                });
+                navigator
+                  .share({
+                    title: "My VastraVerse Cultural Outfit",
+                    text: "Check out my AI-generated cultural outfit from VastraVerse!",
+                    files: [file],
+                  })
+                  .catch(console.error);
+              });
+          } else {
+            // Fallback - copy image URL or show sharing options
+            alert(
+              "Sharing options not available. You can download the image and share it manually."
+            );
+          }
+        });
+
+        // Handle try again button
+        tryAgainButton.addEventListener("click", function () {
+          // Reset the form but keep the uploaded image
+          generatedResults.classList.add("hidden");
+          window.scrollTo({
+            top: document.getElementById("photoshoot").offsetTop,
+            behavior: "smooth",
+          });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        mobileMenuBtn.addEventListener("click", function () {
+          mobileMenu.classList.toggle("hidden");
+        });
+
+        // Theme toggle functionality (placeholder)
+        const themeToggle = document.getElementById("themeToggle");
+        themeToggle.addEventListener("click", function () {
+          // Toggle between sun and moon icons
+          const icon = themeToggle.querySelector("i");
+          if (icon.classList.contains("fa-sun")) {
+            icon.classList.remove("fa-sun");
+            icon.classList.add("fa-moon");
+          } else {
+            icon.classList.remove("fa-moon");
+            icon.classList.add("fa-sun");
+          }
+
+          // In a real implementation, you would toggle dark/light mode here
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById("navbar");
+        window.addEventListener("scroll", function () {
+          if (window.scrollY > 50) {
+            navbar.classList.add("py-2");
+            navbar.classList.add("shadow-md");
+          } else {
+            navbar.classList.remove("py-2");
+            navbar.classList.remove("shadow-md");
+          }
         });
       });
-      
-      // Mobile menu toggle
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const mobileMenu = document.getElementById('mobileMenu');
-      
-      mobileMenuBtn.addEventListener('click', function() {
-        mobileMenu.classList.toggle('hidden');
-      });
-      
-      // Theme toggle functionality (placeholder)
-      const themeToggle = document.getElementById('themeToggle');
-      themeToggle.addEventListener('click', function() {
-        // Toggle between sun and moon icons
-        const icon = themeToggle.querySelector('i');
-        if (icon.classList.contains('fa-sun')) {
-          icon.classList.remove('fa-sun');
-          icon.classList.add('fa-moon');
-        } else {
-          icon.classList.remove('fa-moon');
-          icon.classList.add('fa-sun');
-        }
-        
-        // In a real implementation, you would toggle dark/light mode here
-      });
-      
-      // Navbar scroll effect
-      const navbar = document.getElementById('navbar');
-      window.addEventListener('scroll', function() {
-        if (window.scrollY > 50) {
-          navbar.classList.add('py-2');
-          navbar.classList.add('shadow-md');
-        } else {
-          navbar.classList.remove('py-2');
-          navbar.classList.remove('shadow-md');
-        }
-      });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>
