@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VastraVerse | Tradition Meets AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Great+Vibes&family=Noto+Serif+Devanagari:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: linear-gradient(135deg, #ff9933, #e6b800, #800000, #4b0082);
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
+      font-family: 'Cinzel Decorative', cursive;
+      overflow: hidden;
+      color: white;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Mandala overlay */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('https://i.ibb.co/4mB8gLm/mandala.png') center/contain repeat;
+      opacity: 0.07;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      text-align: center;
+      z-index: 1;
+    }
+
+    .title {
+      font-size: 5rem;
+      background: linear-gradient(90deg, #e6b800, #ff4500);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s infinite;
+      text-shadow: 2px 2px 15px rgba(0,0,0,0.6);
+      font-family: 'Noto Serif Devanagari', serif;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    .subtitle {
+      font-size: 1.8rem;
+      margin-top: 10px;
+      font-family: 'Great Vibes', cursive;
+      color: #e6b800;
+      animation: fadeIn 3s ease;
+    }
+
+    .description {
+      max-width: 700px;
+      margin: 20px auto;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #fff;
+      text-shadow: 0px 0px 8px rgba(0,0,0,0.5);
+      animation: fadeIn 4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Floating emojis */
+    .emoji {
+      position: absolute;
+      font-size: 3rem; /* Bigger size */
+      opacity: 0.85;
+      text-shadow: 0 0 15px rgba(255,255,255,0.9);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .emoji:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+    .emoji:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
+    .emoji:nth-child(3) { bottom: 20%; left: 15%; animation-delay: 2s; }
+    .emoji:nth-child(4) { bottom: 25%; right: 20%; animation-delay: 3s; }
+  </style>
+  <script>
+    // Auto-redirect after 5 seconds
+    setTimeout(() => {
+      window.location.href = "index.html"; // change this to your next page
+    }, 6000);
+  </script>
+</head>
+<body>
+  <!-- Floating emojis -->
+  <div class="emoji">🪔</div>
+  <div class="emoji">🦚</div>
+  <div class="emoji">🎉</div>
+  <div class="emoji">👘</div>
+
+  <div class="container">
+    <h1 class="title">वस्त्र<span style="font-family: 'Cinzel Decorative', cursive;">Verse</span></h1>
+    <div class="subtitle">Where Tradition Drapes the Future</div>
+    <p class="description">
+      Step into a vibrant world where timeless Indian heritage meets cutting-edge AI. 
+      Experience virtual dressing, festival journeys, and elegant attire — 
+      reimagined for the modern era.
+    </p>
+  </div>
+</body>
+</html>
