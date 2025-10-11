@@ -27,7 +27,7 @@ CORS(app)
 
 # Configure Gemini API
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-MODEL = "gemini-1.5-flash-latest"
+MODEL = "gemini-2.5-flash"
 
 # ComfyUI server configuration
 COMFYUI_SERVER = os.getenv("COMFYUI_SERVER", "http://localhost:8188")
@@ -83,6 +83,7 @@ def get_comfyui_workflow(reference_image_name, prompt, negative_prompt="bad anat
         # Load Stable Diffusion model
         "4": {
             "inputs": {
+                #"ckpt_name": "sd_xl_base_1.0.safetensors"
                 "ckpt_name": "v1-5-pruned-emaonly.safetensors"
             },
             "class_type": "CheckpointLoaderSimple"
@@ -92,7 +93,7 @@ def get_comfyui_workflow(reference_image_name, prompt, negative_prompt="bad anat
         "5": {
             "inputs": {
                 "width": 512,
-                "height": 768,
+                "height": 600,
                 "batch_size": 1
             },
             "class_type": "EmptyLatentImage"
@@ -148,7 +149,6 @@ def get_comfyui_workflow(reference_image_name, prompt, negative_prompt="bad anat
             "class_type": "IPAdapter"
         },
 
-        # Sampling with updated step count (50)
         "3": {
             "inputs": {
                 "model": ["18", 0],
@@ -177,7 +177,8 @@ def get_comfyui_workflow(reference_image_name, prompt, negative_prompt="bad anat
         # Final preview image
         "14": {
             "inputs": {
-                "images": ["8", 0]
+                "images": ["8", 0],
+                "preview_only": True
             },
             "class_type": "PreviewImage"
         }
